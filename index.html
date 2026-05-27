@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lietuvių literatūros testai · Brandos egzaminas 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1c1917; --paper: #f7f3ee; --parchment: #ede7dd;
+  --gold: #b8860b; --gold-light: #dfc67a; --gold-bg: #faf5e8;
+  --navy: #1e293b; --navy-soft: #334155;
+  --green: #166534; --green-bg: #dcfce7; --green-border: #86efac;
+  --red: #991b1b; --red-bg: #fee2e2; --red-border: #fca5a5;
+  --amber-bg: #fef9c3; --amber-border: #fde047;
+  --serif: 'Cormorant Garamond', 'Georgia', serif;
+  --sans: 'Fira Sans', 'Segoe UI', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); color: var(--ink); background: var(--paper); line-height: 1.6; min-height: 100vh; }
+
+.hero { background: var(--navy); color: var(--paper); text-align: center; padding: 36px 20px 28px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(120deg, transparent, transparent 80px, rgba(184,134,11,0.03) 80px, rgba(184,134,11,0.03) 82px); }
+.hero h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(22px,5vw,34px); letter-spacing: 1px; position: relative; }
+.hero .sub { font-size: 13px; opacity: 0.6; margin-top: 6px; position: relative; }
+.gold-rule { height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent); }
+
+/* Tab groups */
+.tab-group-label { background: #0a0f1a; color: var(--gold-light); font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px 4px; opacity: 0.8; }
+.tabs { display: flex; background: #0f172a; border-bottom: 1px solid rgba(184,134,11,0.2); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tabs button { flex: 1; min-width: 0; padding: 12px 8px 10px; border: none; background: transparent; color: #94a3b8; font-family: var(--sans); font-size: 11.5px; font-weight: 500; cursor: pointer; transition: 0.25s; border-bottom: 3px solid transparent; white-space: nowrap; }
+.tabs button:hover { color: #cbd5e1; }
+.tabs button.active { color: var(--gold-light); border-bottom-color: var(--gold); background: rgba(184,134,11,0.06); }
+.tab-icon { font-size: 16px; display: block; margin-bottom: 2px; }
+.tab-divider { width: 1px; background: rgba(184,134,11,0.2); flex-shrink: 0; }
+
+.wrap { max-width: 780px; margin: 0 auto; padding: 20px 16px 60px; }
+.section { display: none; }
+.section.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.intro { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--navy-soft); margin-bottom: 18px; line-height: 1.5; }
+
+.card { background: #fff; border-radius: 10px; padding: 22px; margin-bottom: 16px; box-shadow: 0 1px 8px rgba(0,0,0,0.05); border: 1px solid #e7e5e4; }
+.card h3 { font-family: var(--serif); font-weight: 700; font-size: 21px; color: var(--navy); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--gold-light); }
+.card .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #78350f; background: var(--gold-bg); border: 1px solid var(--gold-light); padding: 2px 10px; border-radius: 20px; margin-bottom: 14px; }
+.label { font-weight: 600; font-size: 13.5px; color: var(--navy-soft); margin-bottom: 8px; margin-top: 18px; }
+.label:first-of-type { margin-top: 0; }
+
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.pills button { padding: 5px 14px; border: 1.5px solid var(--gold); border-radius: 20px; background: transparent; color: #78350f; font-family: var(--sans); font-size: 12px; font-weight: 500; cursor: pointer; transition: 0.2s; }
+.pills button:hover, .pills button.active { background: var(--gold); color: #fff; }
+
+.opts { display: flex; flex-direction: column; gap: 6px; }
+.opt { text-align: left; padding: 10px 14px; border: 1.5px solid #d6d3d1; border-radius: 8px; background: var(--paper); font-family: var(--sans); font-size: 13.5px; cursor: pointer; transition: 0.2s; color: #292524; line-height: 1.45; }
+.opt:hover:not(:disabled):not(.locked) { border-color: var(--gold); background: var(--gold-bg); }
+.opt.correct { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+.opt.wrong { border-color: var(--red); background: var(--red-bg); color: var(--red); }
+.opt.locked { cursor: default; opacity: 0.85; }
+
+.bio-text { font-family: var(--serif); font-size: 16px; line-height: 2.2; color: #292524; background: var(--paper); padding: 16px; border-radius: 8px; border: 1px solid #e7e5e4; }
+.essay { font-family: var(--serif); font-size: 17px; line-height: 2.3; color: #292524; background: var(--paper); padding: 16px 18px; border-radius: 8px; border: 1px solid #e7e5e4; }
+.gap { display: inline-block; border: none; border-bottom: 2px dashed var(--gold); background: transparent; font-family: var(--serif); font-size: inherit; color: var(--navy); text-align: center; padding: 0 2px; outline: none; transition: 0.2s; }
+.gap:focus { border-bottom-color: var(--navy); background: rgba(30,41,59,0.04); }
+.gap.ok { border-bottom-color: var(--green) !important; color: var(--green) !important; background: var(--green-bg); }
+.gap.err { border-bottom-color: var(--red) !important; color: var(--red) !important; background: var(--red-bg); text-decoration: line-through; }
+
+.btn { display: inline-block; margin-top: 14px; padding: 11px 28px; border: none; border-radius: 8px; background: var(--navy); color: var(--gold-light); font-family: var(--sans); font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; letter-spacing: 0.3px; }
+.btn:hover { background: #334155; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+.btn.full { display: block; width: 100%; text-align: center; padding: 14px; font-size: 15px; margin-top: 22px; }
+
+.fb { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+.fb.ok { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.fb.err { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.fb.mid { background: var(--amber-bg); color: #854d0e; border: 1px solid var(--amber-border); }
+.fb.big { text-align: center; font-size: 17px; padding: 16px; margin-top: 22px; }
+.explain { margin-top: 8px; font-size: 13px; color: #78350f; background: var(--amber-bg); padding: 9px 13px; border-radius: 6px; border-left: 3px solid var(--gold); line-height: 1.5; }
+.corrections { margin-top: 8px; font-size: 13px; color: var(--navy-soft); line-height: 2; }
+.corrections span { display: inline-block; background: var(--amber-bg); padding: 1px 8px; border-radius: 4px; margin: 2px 4px 2px 0; }
+.corrections strong { color: var(--green); }
+
+.match-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.match-char { font-family: var(--serif); font-weight: 600; font-size: 15px; min-width: 170px; color: var(--navy); }
+.match-sel { flex: 1; min-width: 200px; padding: 9px 12px; border: 1.5px solid #d6d3d1; border-radius: 7px; font-family: var(--sans); font-size: 13px; background: #fff; color: var(--ink); }
+.match-sel.ok { border-color: var(--green); background: var(--green-bg); }
+.match-sel.err { border-color: var(--red); background: var(--red-bg); }
+.match-ans { font-size: 12px; color: var(--green); font-weight: 600; }
+
+.instr { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--navy-soft); margin-bottom: 16px; }
+.theme-q { font-family: var(--serif); font-weight: 600; font-size: 15.5px; color: var(--navy); font-style: italic; margin-bottom: 10px; padding-left: 14px; border-left: 3px solid var(--gold); }
+
+.prow { margin-bottom: 12px; }
+.prow .phrase { font-family: var(--serif); font-size: 16px; font-style: italic; color: #292524; margin-bottom: 6px; line-height: 1.5; }
+.psel { width: 100%; padding: 9px 12px; border: 1.5px solid #d6d3d1; border-radius: 7px; font-family: var(--sans); font-size: 13px; background: #fff; color: var(--ink); }
+.psel.ok { border-color: var(--green); background: var(--green-bg); }
+.psel.err { border-color: var(--red); background: var(--red-bg); }
+.pans { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 4px; display: block; }
+.aslot { display: block; width: 100%; padding: 10px 12px; margin: 6px 0; border: 1.5px solid #d6d3d1; border-radius: 7px; font-family: var(--sans); font-size: 13px; background: #fff; color: var(--ink); }
+.aslot.ok { border-color: var(--green); background: var(--green-bg); }
+.aslot.err { border-color: var(--red); background: var(--red-bg); }
+.atext { font-family: var(--serif); font-size: 16.5px; line-height: 1.9; color: #292524; }
+.aans { font-size: 12.5px; color: var(--green); font-weight: 600; margin: 2px 0 8px; display: block; }
+
+.foot { text-align: center; padding: 24px 16px; font-size: 12px; color: #a8a29e; border-top: 1px solid #e7e5e4; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Lietuvių literatūros testai</h1>
+  <p class="sub">Brandos egzaminas · 12 klasė · 10 autorių · visi testai</p>
+</div>
+<div class="gold-rule"></div>
+
+<div class="tabs" id="tabs">
+  <button class="active" data-tab="bio"><span class="tab-icon">📜</span>Laikotarpis ir rašyba</button>
+  <button data-tab="analysis"><span class="tab-icon">📖</span>Kūrinių analizė</button>
+  <button data-tab="match"><span class="tab-icon">🎭</span>Veikėjų atpažinimas</button>
+  <button data-tab="themes"><span class="tab-icon">🔗</span>Sąsajos rašiniui</button>
+  <div class="tab-divider"></div>
+  <button data-tab="essays"><span class="tab-icon">✍️</span>Rašinio fragmentai</button>
+  <button data-tab="classify"><span class="tab-icon">🧩</span>Frazių vaidmuo</button>
+  <button data-tab="assemble"><span class="tab-icon">🏗️</span>Sudėliok rašinį</button>
+</div>
+
+<div class="wrap">
+
+  <!-- TAB 1: BIO -->
+  <div class="section active" id="sec-bio">
+    <div class="pills" id="author-pills"></div>
+    <div id="bio-card-area"></div>
+  </div>
+
+  <!-- TAB 2: ANALYSIS -->
+  <div class="section" id="sec-analysis">
+    <div id="analysis-area"></div>
+    <div id="analysis-fb"></div>
+    <button class="btn full" id="analysis-retry" style="display:none">↺ Pabandyti dar kartą</button>
+  </div>
+
+  <!-- TAB 3: MATCH -->
+  <div class="section" id="sec-match">
+    <p class="instr">Priskirk kiekvieną veikėją teisingam kūriniui:</p>
+    <div id="match-area"></div>
+    <div id="match-fb"></div>
+    <button class="btn full" id="match-retry" style="display:none">↺ Pabandyti dar kartą</button>
+  </div>
+
+  <!-- TAB 4: THEMES -->
+  <div class="section" id="sec-themes">
+    <p class="instr">Priskirk kiekvienai temai tinkamiausius autorius:</p>
+    <div id="themes-area"></div>
+    <div id="themes-fb"></div>
+    <button class="btn full" id="themes-retry" style="display:none">↺ Pabandyti dar kartą</button>
+  </div>
+
+  <!-- TAB 5: ESSAYS -->
+  <div class="section" id="sec-essays">
+    <p class="intro">Perskaityk rašinio fragmentą ir įrašyk praleistas raides. Tai ir rašybos pratimas, ir paruoštos formuluotės egzaminui.</p>
+    <div class="pills" id="essay-pills"></div>
+    <div id="essay-groups"></div>
+  </div>
+
+  <!-- TAB 6: CLASSIFY -->
+  <div class="section" id="sec-classify">
+    <p class="intro">Nustatyk, kuriai rašinio daliai kiekviena frazė tinka: įžangai, argumentavimui, palyginimui ar apibendrinimui.</p>
+    <div class="pills" id="classify-pills"></div>
+    <div id="classify-groups"></div>
+  </div>
+
+  <!-- TAB 7: ASSEMBLE -->
+  <div class="section" id="sec-assemble">
+    <p class="intro">Sudėliok darnų rašinį: kiekvienoje tuščioje vietoje pasirink tinkamiausią frazę.</p>
+    <div id="assemble-area"></div>
+    <button class="btn full" id="check-assemble">Tikrinti</button>
+    <div id="assemble-fb"></div>
+  </div>
+
+</div>
+<div class="foot">Lietuvių kalbos brandos egzaminas · 2026 · visi testai viename</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════
+
+const AUTHORS = [
+  { id:"donelaitis", name:"Kristijonas Donelaitis", short:"Donelaitis",
+    correctPeriod:"XVIII\u00a0a. vidurys (Ap\u0161vieta, pietizmas)",
+    periods:["XVII\u00a0a. (Barokas)","XVIII\u00a0a. vidurys (Ap\u0161vieta, pietizmas)","XIX\u00a0a. prad\u017eia (Romantizmas)","XX\u00a0a. prad\u017eia (Modernizmas)"],
+    bio:`Kristijonas Donelaitis (1714\u20131780) \u2014 Ma\u017eosios Lietuvos ev___gelik\u0173 liut___ron\u0173 kunigas, Pr\u016bsijos lie___vi\u0173 gro\u017ein\u0117s liter___t\u016bros pradininkas. Gim\u0117 Lazdyn___liuose, studij___vo teologij\u0105 Karali___\u010diaus univer___tete, lan___\u0117 lietuvi\u0173 kalbos seminar\u0105. Apie 37 metus buvo Tolminkiemio par___pijos pastorius, kur past___t\u0117 ba\u017eny\u010di\u0105, mokykl\u0105 ir past___ri\u0173 na\u0161li\u0173 namus. Suk\u016br\u0117 epin\u0119 did___ktin\u0119 poem\u0105 \u201eMetai\u201c (apie 1765\u20131775\u00a0m.), para\u0161yt\u0105 antikiniu he___zametru, sudaryt\u0105 i\u0161 keturi\u0173 dali\u0173. Tai \u2013 pirm___sis gro\u017ein\u0117s lietuvi\u0173 liter___t\u016bros k\u016brinys.`,
+    answers:["an","e","tuv","a","\u0117","a","au","site","k","a","a","o","a","g","a","a"] },
+  { id:"gete", name:"J.\u00a0V. fon G\u0117t\u0117", short:"G\u0117t\u0117",
+    correctPeriod:"XVIII\u00a0a. pab. \u2013 XIX\u00a0a. pr. (Ap\u0161vieta\u00a0/ Sturm und Drang)",
+    periods:["XVII\u00a0a. (Barokas)","XVIII\u00a0a. pab. \u2013 XIX\u00a0a. pr. (Ap\u0161vieta\u00a0/ Sturm und Drang)","XIX\u00a0a. vidurys (Realizmas)","XX\u00a0a. prad\u017eia (Modernizmas)"],
+    bio:`Johanas Volfgangas fon G\u0117t\u0117 (1749\u20131832) \u2014 did___sis vokie\u010di\u0173 poetas, dram___turgas, proz___ninkas, moksl___ninkas ir vals___yb\u0117s veik\u0117jas, univ___rsalus Europos kul___\u016bros genijus. Studij___vo teis\u0119, i\u0161gars\u0117jo romanu \u201eJaunojo Vert___rio kan\u010d___os\u201c. Ilgai gyveno V___imare, \u0117jo auk\u0161tas valst___b\u0117s pareigas, dom\u0117j___si gamtos moksl___is. Prie filos___fin\u0117s trag___dijos \u201eFaustas\u201c dirbo apie \u0161e\u0161is de\u0161___mtme\u010dius. Pirm___ji dalis i\u0161leista 1808\u00a0m., antr___ji \u2014 1832\u00a0m.`,
+    answers:["y","a","i","i","t","e","t","a","e","i","e","y","o","a","o","e","i","o","o"] },
+  { id:"mickevicius", name:"Adomas Mickevi\u010dius", short:"Mickevi\u010dius",
+    correctPeriod:"XIX\u00a0a. prad\u017eia (Romantizmas)",
+    periods:["XVIII\u00a0a. vidurys (Ap\u0161vieta)","XIX\u00a0a. prad\u017eia (Romantizmas)","XIX\u00a0a. pabaiga (Realizmas)","XX\u00a0a. vidurys (Egzistencializmas)"],
+    bio:`Adomas Mick___vi\u010dius (1798\u20131855) \u2014 vienas \u017eym___ausi\u0173 pas___ulinio rom___ntizmo atstov\u0173. Gim\u0117 Naugard___ke (dabartin\u0117 Balt___rusija), istor___n\u0117s Lietuvos \u017eem\u0117je. Ra\u0161\u0117 lenk___kalba, bet save siejo su ist___rine Lietuva ir LDK pilit___tine tradicija. Baig\u0117 Vilniaus univ___rsitet\u0105, mok___tojavo Kaune. Prikl___us\u0117 slaptai filom___t\u0173 draugijai. U\u017e veikl\u0105 i\u0161tremtas \u012f Rusij\u0105, v\u0117liau em___gravo \u012f V___kar\u0173 Europ\u0105. Par___\u0161\u0117 poemas \u201eKonradas Val___nrodas\u201c, \u201eV___lin\u0117s\u201c (III\u00a0d.) ir \u201ePonas Tadas\u201c.`,
+    answers:["e","ia","au","a","u","a","i","\u0173","o","i","e","y","a","a","i","a","a","e","\u0117"] },
+  { id:"baranauskas", name:"Antanas Baranauskas", short:"Baranauskas",
+    correctPeriod:"XIX\u00a0a. vidurys (Romantizmas, atgimimo prad\u017eia)",
+    periods:["XVIII\u00a0a. vidurys (Ap\u0161vieta)","XIX\u00a0a. vidurys (Romantizmas, atgimimo prad\u017eia)","XIX\u00a0a. pabaiga (Realizmas)","XX\u00a0a. prad\u017eia (Modernizmas)"],
+    bio:`Antanas Baran___uskas (1835\u20131902) \u2014 vysk___pas, poetas, kalb___ninkas. Gim\u0117 Anyk\u0161\u010d___uose, vals___ie\u010di\u0173 \u0161eimoje. Eil___uoti pask___tino poet\u0117 Karolina Pran___auskaite. Mok\u0117si Varn___\u0173 kunig\u0173 semin___rijoje, kur para\u0161\u0117 pagr___ndinius k\u016brin___us. V\u0117liau studij___vo Pet___rburgo dvas___n\u0117je akad___mijoje, Miunchene, Romoje. Rom___ntin\u0119 poem\u0105 \u201eAnyk\u0161\u010d___\u0173 \u0161ilel\u012f\u201c para\u0161\u0117 1858\u20131859\u00a0m. ryt\u0173 auk\u0161ta___\u010di\u0173 (anyk\u0161t___n\u0173) tarme, silab___ne eil\u0117d___ra.`,
+    answers:["a","u","i","i","t","i","a","i","i","a","i","i","a","e","i","e","a","i","i","i","i","a"] },
+  { id:"maironis", name:"Jonas Ma\u010diulis-Maironis", short:"Maironis",
+    correctPeriod:"XIX\u00a0a. pab. \u2013 XX\u00a0a. pr. (Tautinis romantizmas)",
+    periods:["XVIII\u00a0a. vidurys (Ap\u0161vieta)","XIX\u00a0a. prad\u017eia (Romantizmas)","XIX\u00a0a. pab. \u2013 XX\u00a0a. pr. (Tautinis romantizmas)","XX\u00a0a. vidurys (Modernizmas)"],
+    bio:`Jonas Ma\u010diulis, pasir___\u0161in\u0117j\u0119s Maironio slap___vard\u017eiu (1862\u20131932), \u2014 viena ryk\u0161___ausi\u0173 XIX\u00a0a. pab___igos \u2013 XX\u00a0a. prad\u017eios Lietuvos asmenybi\u0173. Jis ne tik did___iausias to meto lietuvi\u0173 po___tas rom___ntikas, bet ir katali___\u0173 kunigas, prel___tas, t___ologijos daktaras, Kauno kunig\u0173 semin___rijos d\u0117st___tojas bei ilgam___tis rekt___rius, Pet___rburgo dvas___n\u0117s akad___mijos profes___rius. Pirm___sis eil___ra\u0161\u010di\u0173 rinkin___s \u201ePav___sario balsai\u201c i\u0161leistas 1895\u00a0m. \u2014 laik___mas tautos atgim___mo manifestu ir modernios___s lietuvi\u0173 lir___kos prad\u017eia.`,
+    answers:["a","y","ia","a","\u017e","e","a","k","a","e","a","y","e","o","e","i","e","a","o","e","y","a","i","o","i","i"] },
+  { id:"savickis", name:"Jurgis Savickis", short:"Savickis",
+    correctPeriod:"XX\u00a0a. I pus\u0117 (Modernizmas, impresionizmas)",
+    periods:["XIX\u00a0a. pabaiga (Realizmas)","XX\u00a0a. I pus\u0117 (Modernizmas, impresionizmas)","XX\u00a0a. vidurys (Egzodo literat\u016bra)","XX\u00a0a. II pus\u0117 (Postmodernizmas)"],
+    bio:`Jurgis Savickis (1890\u20131952) \u2014 ra\u0161ytojas ir dipl___matas, brand___s modern___stas, intelekt___aliosios lietuvi\u0173 nov___l\u0117s pradin___nkas. Gim\u0117 dvare netoli Ariog___los. Stud___javo dail\u0119 Maskvoje ir Krok___voje. Lietuvai pask___lbus neprikl___usomyb\u0119, pasirinko diplom___to karjer\u0105 \u2014 buvo Lietuvos atstov___s Danijoje, Skand___navijos \u0161alyse, Olan___ijoje. Sov___etams okup___vus Lietuv\u0105, aps___gyveno Piet\u0173 Pranc___zijoje. Jo nov___l\u0117se \u201eKova\u201c ir \u201eVagis\u201c rei\u0161kiasi iron___ja, sark___zmas, teatr___li\u0161kumas.`,
+    answers:["o","u","i","u","e","i","a","i","u","e","a","a","a","i","d","i","a","i","\u016b","e","i","a","a"] },
+  { id:"sruoga", name:"Balys Sruoga", short:"Sruoga",
+    correctPeriod:"XX\u00a0a. vidurys (Katastrof\u0173 laikotarpis, memuaristika)",
+    periods:["XIX\u00a0a. pabaiga (Realizmas)","XX\u00a0a. prad\u017eia (Simbolizmas)","XX\u00a0a. vidurys (Katastrof\u0173 laikotarpis, memuaristika)","XX\u00a0a. II pus\u0117 (Postmodernizmas)"],
+    bio:`Balys Sruoga (1896\u20131947) \u2014 poetas, proz___ninkas, dram___turgas, liter___t\u016bros ir teatro tyrin___tojas. Jaun___st\u0117je k\u016br\u0117 simbol___stin\u0119 poe___ij\u0105. Stud___javo Rusijoje ir Vokiet___joje (Miunchene apgyn\u0117 dakt___ro dis___rtacij\u0105), profes___riavo Kauno univ___rsitete. 1943\u00a0m. kov___naciai su\u0117m\u0117 j\u012f ir u\u017ed___r\u0117 \u0160tut___ofo koncen___racijos stov___kloje. \u201eDiev\u0173 mi\u0161k___\u201c para\u0161\u0117 1945\u00a0m., bet knyga sov___etin\u0117s cenz___ros buvo sul___ikyta \u2014 skaity___ojus pasiek\u0117 tik 1957\u00a0m.`,
+    answers:["i","a","a","\u0117","y","i","z","i","i","a","a","o","e","o","a","h","t","y","\u0105","i","\u016b","a","t"] },
+  { id:"putinas", name:"V.\u00a0Mykolaitis-Putinas", short:"Putinas",
+    correctPeriod:"XX\u00a0a. I pus\u0117 (Simbolizmas, modernizmas)",
+    periods:["XIX\u00a0a. pabaiga (Realizmas)","XX\u00a0a. I pus\u0117 (Simbolizmas, modernizmas)","XX\u00a0a. vidurys (Egzodo literat\u016bra)","XX\u00a0a. II pus\u0117 (Postmodernizmas)"],
+    bio:`Vincas Mykolaitis-Put___nas (1893\u20131967) \u2014 poetas, proz___ninkas, dram___turgas, liter___t\u016bros moksli___inkas, simbol___stas. Gim\u0117 Pilo___i\u0161k\u0117se, Mar___jampol\u0117s apskrityje. T\u0117v\u0173 val___a stojo \u012f Sein___\u0173 kunig\u0173 semin___rij\u0105, 1915\u00a0m. \u012f\u0161v___ntintas kunigu. Stud___javo Frib___ro universitete (\u0160veic___rijoje) ir Miunchene. Profes___riavo Kauno Vyt___uto Did___iojo univer___tete. 1933\u00a0m. baig\u0117 ra\u0161yti pirm\u0105j\u012f lietuvi\u0173 psicholog___n\u012f intelekt___alin\u012f roman\u0105 \u201eAltori\u0173 \u0161___\u0161\u0117ly\u201c. 1935\u00a0m. ofic___aliai atsisak___kunig___st\u0117s ir ved\u0117.`,
+    answers:["i","i","a","a","n","i","t","i","i","\u0173","a","e","i","\u016b","a","o","a","\u017e","i","u","i","e","i","\u0117","y"] },
+  { id:"skema", name:"Antanas \u0160k\u0117ma", short:"\u0160k\u0117ma",
+    correctPeriod:"XX\u00a0a. vidurys (Egzodo literat\u016bra, modernizmas)",
+    periods:["XIX\u00a0a. pabaiga (Realizmas)","XX\u00a0a. I pus\u0117 (Simbolizmas, tarpukaris)","XX\u00a0a. vidurys (Egzodo literat\u016bra, modernizmas)","XX\u00a0a. II pus\u0117 (Postmodernizmas)"],
+    bio:`Antanas \u0160k___ma (1910\u20131961) \u2014 vienas reik\u0161m___ngiausi\u0173 XX\u00a0a. lietuvi\u0173 modern___st\u0173, savo novatori\u0161___umu sulau\u017e\u0119s nusist___v\u0117jusias normas. Buvo akt___rius ir re\u017e___s___erius. 1944\u00a0m. pasit___auk\u0117 i\u0161 Lietuvos, gyveno DP stov___klose Vokiet___joje, v\u0117liau emig___avo \u012f JAV. Dirbo kel___uvinink___ (lift___ninku). Rom___n\u0105 \u201eBalta drob___l\u0117\u201c (1958) para\u0161\u0117 \u201es\u0105mon___s srauto\u201c techn___ka. Pagr___ndinis veik\u0117jas \u2014 poetas Antanas Gar\u0161___a, dirbantis did___iausiame Niujorko vie\u0161b___tyje.`,
+    answers:["\u0117","i","i","k","o","o","i","i","r","y","i","r","t","u","i","a","u","\u0117","i","i","v","\u017e","u"] },
+  { id:"vaizgantas", name:"J.\u00a0Tumas-Vai\u017egantas", short:"Vai\u017egantas",
+    correctPeriod:"XIX\u00a0a. pab. \u2013 XX\u00a0a. pr. (Atgimimas, realizmas)",
+    periods:["XVIII\u00a0a. vidurys (Ap\u0161vieta)","XIX\u00a0a. pab. \u2013 XX\u00a0a. pr. (Atgimimas, realizmas)","XX\u00a0a. vidurys (Katastrof\u0173 laikotarpis)","XX\u00a0a. II pus\u0117 (Postmodernizmas)"],
+    bio:`Juozas Tumas-Vai\u017egantas (1869\u20131933) \u2014 kun___gas, ra\u0161ytojas, publ___cistas, liter___t\u016bros ist___rikas, vis___omenininkas, akt___vus tautinio atgim___mo veik\u0117jas. Red___gavo laikr___\u0161t\u012f \u201eT___vyn\u0117s sargas\u201c. V\u0117liau buvo Vyt___uto Did___iojo univer___teto profes___rius. Apysakoje \u201eD___d\u0117s ir d___dien\u0117s\u201c vaizd___ojami trys pagr___ndiniai veik\u0117jai: Myk___las \u0160iuk\u0161ta, Sev___rija Puk\u0161tait\u0117 ir Rap___las Gei\u0161\u0117 \u2014 j\u0173 lik___mai atskleid___ia baud\u017e___avos ir pobaud\u017e___avin\u0119 Lietuvos kaimo tikrov___.`,
+    answers:["i","i","a","o","u","y","i","a","a","\u0117","a","\u017e","site","o","\u0117","\u0117","u","i","o","e","o","i","\u017e","i","i","\u0119"] }
+];
+
+const ANALYSIS = [
+  {q:"Kokia yra \u201eMetai\u201c kompozicijos strukt\u016bra?", opts:["Trys dalys pagal epochas","Keturios dalys pagal met\u0173 laikus","Dvylika giesmi\u0173","Penkios dalys pagal veik\u0117jus"], c:1, ex:"\u201eMetai\u201c sudaryti i\u0161 keturi\u0173 dali\u0173: \u201ePavasario linksm.\u201c, \u201eVasaros darbai\u201c, \u201eRudenio g\u0117ryb\u0117s\u201c, \u201e\u017diemos r\u016bpes\u010diai\u201c."},
+  {q:"Kokia eil\u0117daros forma para\u0161yti \u201eMetai\u201c?", opts:["Silabin\u0117 eil\u0117dara","Antikinis hegzametras","Sonetas","Laisvoji eil\u0117"], c:1, ex:"Donelaitis ra\u0161\u0117 antikiniu hegzametru \u2014 forma, b\u016bdinga graik\u0173 ir rom\u0117n\u0173 epams."},
+  {q:"Kas yra Pri\u010dkus \u201eMetuose\u201c?", opts:["Amtsrotas (prievaizdas)","\u0160alty\u0161ius (kaimo seni\u016bnas)","Kunigas","Dvaro ponas"], c:1, ex:"Pri\u010dkus \u2014 \u0161alty\u0161ius, kaimo seni\u016bnas, tarpininkas tarp pon\u0173 ir b\u016br\u0173, dorovinis autoritetas."},
+  {q:"Kuo \u201eFausto\u201c siu\u017eete remiasi Mefistofelio ir Dievo gin\u010das?", opts:["Antikine graik\u0173 mitologija","Vokie\u010di\u0173 liaudies pasaka","Biblijos Jobo knyga","Dant\u0117s \u201eDievi\u0161k\u0105ja komedija\u201c"], c:2, ex:"Prologe danguje Dievas ir Mefistofelis la\u017einasi d\u0117l Fausto \u2014 motyvas i\u0161 Biblijos Jobo knygos."},
+  {q:"Kokia Fausto ir Mefistofelio sutarties s\u0105lyga?", opts:["Faustas turi nu\u017eudyti nekalt\u0105j\u012f","Faustas turi padaryti de\u0161imt blog\u0173 darb\u0173","Jei Faustas panor\u0117s sustabdyti akimirk\u0105 \u2014 velnias laim\u0117s jo siel\u0105","Faustas turi atsi\u017ead\u0117ti mokslo"], c:2, ex:"Kai tik Faustas pasakys \u201esustok, akimirka, tu tokia gra\u017ei!\u201c, Mefistofelis laim\u0117s jo siel\u0105."},
+  {q:"Kas yra filomatai, su kuriais siejamas Mickevi\u010dius?", opts:["Profesori\u0173 draugija Kaune","Slapta patriotin\u0117 student\u0173 draugija Vilniaus universitete","Emigrant\u0173 organizacija Pary\u017eiuje","Religin\u0117 brolija Naugarduke"], c:1, ex:"Filomatai \u2014 slapta patriotin\u0117 student\u0173 draugija Vilniaus universitete."},
+  {q:"Kas paskatino A.\u00a0Baranau\u0161k\u0105 para\u0161yti \u201eAnyk\u0161\u010di\u0173 \u0161ilel\u012f\u201c?", opts:["Vyskupo Valan\u010diaus u\u017esakymas","D\u0117stytojo teiginys, kad lietuvi\u0173 kalba netinka poezijai","Noras apra\u0161yti baud\u017eiavos naikinim\u0105","Meil\u0117 Karolinai Praniauskaitei"], c:1, ex:"D\u0117stytojas lenkas tvirtino, kad lietuvi\u0173 kalba netinka poezijai \u2014 Baranauskas nor\u0117jo \u012frodyti prie\u0161ingai."},
+  {q:"Kaip \u201eAnyk\u0161\u010di\u0173 \u0161ilelyje\u201c suprantama mi\u0161ko sunaikinimo alegorija?", opts:["Pramon\u0117s revoliucijos pasekm\u0117s","Mi\u0161ko kirtimas = Lietuvos tautos ir kalbos slopinimas","Baud\u017eiavos panaikinimo blogoji pus\u0117","Gamtos stichij\u0173 galyb\u0117"], c:1, ex:"\u0160ilelis \u2014 tai Lietuva; ta pati j\u0117ga, kuri sugr\u0101u\u017e\u0117 mi\u0161k\u0105, \u201enulau\u017eia\u201c ir giesm\u0119 \u2014 tautos engimas."},
+  {q:"Maironio \u201ePavasario bals\u0173\u201c likimas \u2014 kas jiems b\u016bdinga?", opts:["Publikuoti vos kart\u0105 ir pamir\u0161ti","Rinkinys nuolat pildytas naujais eil\u0117ra\u0161\u010diais, pavadinimas nekeistas","Kiekvienas leidimas tur\u0117jo kit\u0105 pavadinim\u0105","Cenz\u016bra juos u\u017edraud\u0117"], c:1, ex:"\u201ePavasario balsai\u201c papildomi leisti 1905, 1913, 1920\u00a0m. \u2014 pavadinimas nekeistas."},
+  {q:"Kokia pagrindin\u0117 Sruogos ironijos funkcija \u201eDiev\u0173 mi\u0161ke\u201c?", opts:["Pralinksminti skaityto j\u0105","Pad\u0117ti i\u0161laikyti \u017emogi\u0161kum\u0105 prie\u0161 dehumanizacij\u0105","Pajuokti kalinius","Parodyti autoriaus abejingum\u0105"], c:1, ex:"Ironija \u2014 ginklas ir skydas prie\u0161 dvasin\u0119 anemij\u0105, savigarbos i\u0161laikymo priemon\u0117."},
+  {q:"Koks pagrindinis Liudo Vasario vidinis konfliktas?", opts:["Meil\u0117 dviem moterims","Kunigo pa\u0161aukimas prie\u0161 poeto k\u016bryb\u0105","T\u0117vyn\u0117s ir emigracijos pasirinkimas","Tik\u0117jimo ir ateizmo kova"], c:1, ex:"\u201eKaip kunigas \u2014 ne poetas, o kaip poetas \u2014 ne kunigas.\u201c Kunigo pa\u0161aukimo ir k\u016br\u0117jo laisv\u0117s prie\u0161tara."},
+  {q:"Kokia technika para\u0161yta \u201eBalta drobul\u0117\u201c?", opts:["Epistolinis romanas (lai\u0161kais)","Klasikinis realistinis pasakojimas","S\u0105mon\u0117s srauto technika","Dienora\u0161tin\u0117 forma"], c:2, ex:"\u201eBalta drobul\u0117\u201c para\u0161yta s\u0105mon\u0117s srauto technika \u2014 n\u0117ra chronologijos, pinami asmuo ir prisiminimai."},
+  {q:"Kas yra \u201ed\u0117d\u0117s ir d\u0117dien\u0117s\u201c Vai\u017eganto apysakoje?", opts:["T\u0117vo ir motinos broliai / seserys","Prie broli\u0173 \u016bkio pasilik\u0119 dirbti \u017emon\u0117s \u2014 tarp tarno ir \u0161eimos nario","Dvaro ponai ir ponios","Miesto giminai\u010diai"], c:1, ex:"\u201eD\u0117d\u0117s\u201c rei\u0161kia socialin\u012f santyk\u012f: neved\u0119 ar na\u0161liai, dirbantys prie broli\u0173 \u016bkio be atlyginimo."},
+  {q:"K\u0105 Mykoliukas simbolizuoja Vai\u017eganto k\u016brinyje?", opts:["Aktyv\u0173 revoliucionieri\u0173","Gab\u0173, bet valios stokojant\u012f \u017emog\u0173, palau\u017et\u0105 aplinkybiu\u0328","Turting\u0105 ir ambicinng\u0105 \u016bkinink\u0105","Religingą kunig\u0105"], c:1, ex:"Mykoliukas \u2014 jautrus menininkas (smuikininkas), bet stokoja valios, tod\u0117l lieka pastumd\u0117lis."}
+];
+
+const CHARACTERS = [
+  {ch:"Pri\u010dkus", w:"\u201eMetai\u201c (Donelaitis)"},
+  {ch:"Mefistofelis", w:"\u201eFaustas\u201c (G\u0117t\u0117)"},
+  {ch:"Konradas (Gustavas)", w:"\u201eV\u0117lin\u0117s\u201c (Mickevi\u010dius)"},
+  {ch:"Liudas Vasaris", w:"\u201eAltori\u0173 \u0161e\u0161\u0117ly\u201c (Putinas)"},
+  {ch:"Antanas Gar\u0161va", w:"\u201eBalta drobul\u0117\u201c (\u0160k\u0117ma)"},
+  {ch:"Severija Puk\u0161tait\u0117", w:"\u201eD\u0117d\u0117s ir d\u0117dien\u0117s\u201c (Vai\u017egantas)"},
+  {ch:"Rapolas Gei\u0161\u0117", w:"\u201eD\u0117d\u0117s ir d\u0117dien\u0117s\u201c (Vai\u017egantas)"},
+  {ch:"Margarita (Gretchen)", w:"\u201eFaustas\u201c (G\u0117t\u0117)"},
+  {ch:"Slunkius", w:"\u201eMetai\u201c (Donelaitis)"},
+  {ch:"Elena", w:"\u201eBalta drobul\u0117\u201c (\u0160k\u0117ma)"},
+  {ch:"Baronien\u0117 Rainakien\u0117", w:"\u201eAltori\u0173 \u0161e\u0161\u0117ly\u201c (Putinas)"},
+  {ch:"Mykoliukas", w:"\u201eD\u0117d\u0117s ir d\u0117dien\u0117s\u201c (Vai\u017egantas)"}
+];
+
+const THEMES = [
+  {t:"Ironija kaip ginklas prie\u0161 dehumanizacij\u0105", a:"Sruoga ir Savickis", opts:["Donelaitis ir Baranauskas","Sruoga ir Savickis","Mickevi\u010dius ir Maironis","Putinas ir \u0160k\u0117ma"]},
+  {t:"K\u016br\u0117jo ir aplinkos konfliktas, asmenyb\u0117s dvilypumas", a:"Mykolaitis-Putinas ir \u0160k\u0117ma", opts:["Donelaitis ir G\u0117t\u0117","Baranauskas ir Maironis","Mykolaitis-Putinas ir \u0160k\u0117ma","Vai\u017egantas ir Savickis"]},
+  {t:"T\u0117vyn\u0117s meil\u0117, idealizuota praeitis, tautinis atgimimas", a:"Mickevi\u010dius, Baranauskas ir Maironis", opts:["Sruoga, \u0160k\u0117ma ir Savickis","Donelaitis, G\u0117t\u0117 ir Putinas","Mickevi\u010dius, Baranauskas ir Maironis","Vai\u017egantas, Savickis ir Sruoga"]},
+  {t:"\u017dmogaus ir gamtos dvasinis ry\u0161ys", a:"Donelaitis, Baranauskas ir Vai\u017egantas", opts:["G\u0117t\u0117, \u0160k\u0117ma ir Savickis","Donelaitis, Baranauskas ir Vai\u017egantas","Sruoga, Putinas ir Mickevi\u010dius","Maironis, Savickis ir G\u0117t\u0117"]},
+  {t:"XX\u00a0a. katastrofos, \u017emogaus praradimai, dvasinis atsparumas", a:"Sruoga ir \u0160k\u0117ma", opts:["Donelaitis ir Baranauskas","Maironis ir Mickevi\u010dius","Vai\u017egantas ir Savickis","Sruoga ir \u0160k\u0117ma"]},
+  {t:"Gyvenimo prasm\u0117s ie\u0161kojimas, nuolatinis nerimstantis siekis", a:"G\u0117t\u0117 (Faustas) ir Putinas (Vasaris)", opts:["G\u0117t\u0117 (Faustas) ir Putinas (Vasaris)","Donelaitis ir Baranauskas","Savickis ir Vai\u017egantas","Sruoga ir Maironis"]}
+];
+
+const ESSAYS = [
+  {title:"Pareiga ir asmeniniai tro\u0161kimai", tag:"Putinas \u00b7 G\u0117t\u0117",
+   text:"K\u016briniuose atsisklei[d\u017e]ia am[\u017e]ina kova tarp pareigos ir asmenini[\u0173] tro[\u0161]kim\u0173. Romane \u201eAltori\u0173 \u0161e\u0161\u0117ly\u201c Liudas Vasaris i[\u0161]gyvena gil[\u0173] vidin[\u012f] konflikt[\u0105] \u2014 jis negali vienu metu b[\u016b]ti ir kunigas, ir poetas. Veik\u0117jo pasirinkimai atskleid\u017eia jo moralines nuostatas, o ilga dvasin[\u0117] branda veda \u012f i\u0161sivadavim[\u0105]. Pana\u0161i problema nagrin\u0117jama ir G\u0117t\u0117s \u201eFauste\u201c, kur herojus nenuilstamai ie\u0161ko b[\u016b]ties pilnatv\u0117s. Nors k\u016brini\u0173 aplinkybe\u0301s skirtingos, abu veik\u0117jai susiduria su moralinio pasirinkimo b[\u016b]tinybe. Taigi galima teigti, kad \u017emogaus vertyb\u0117s lemia jo gyvenimo pasirinkimus."},
+  {title:"Tikrasis veidas sunkum\u0173 akivaizdoje", tag:"Sruoga",
+   text:"Tik susid[\u016b]r\u0119s su sunkumais \u017emogus parodo savo tikr[\u0105]j\u012f veid[\u0105]. Balio Sruogos memuaruose \u201eDiev\u0173 mi\u0161kas\u201c vai[z]duojama \u0160tuthofo koncentracijos stovykla, kurioje \u017emogus kasdien grumiasi d\u0117l orumo. Autorius pabr[\u0117][\u017e]ia, kad tikrosios vertyb[\u0117]s i[\u0161]ry\u0161k\u0117ja kriz[\u0117]s metu, tod\u0117l ironija tampa dvasinio atsparumo ginklu. \u0160i situacija parodo \u017emogaus geb\u0117jim[\u0105] i\u0161likti doram net sud\u0117tingomis aplinkybemis. Galima pasteb\u0117ti, kad veik\u0117j[\u0105] labiausiai veikia ne aplinka, o jo s[\u0105]\u017ein\u0117. Apibendrinant galima sakyti, kad \u017emogaus stipryb[\u0117] atsiskleid\u017eia sunkiomis akimirkomis."},
+  {title:"Meil\u0117 t\u0117vynei per epochas", tag:"Maironis \u00b7 Baranauskas",
+   text:"Kiekviena epocha kelia \u017emogui tuos pa[\u010d]ius vertybinius klausimus, tarp j\u0173 \u2014 meil\u0117s t\u0117vynei klausim[\u0105]. Maironio rinkinyje \u201ePavasario balsai\u201c garbinga Lietuvos praeitis tampa [\u012f]kv\u0117pimo \u0161altiniu ir kvietimu aukotis tautai. Pana\u0161i mintis atsisklei[d\u017e]ia ir Antano Baranausko poemoje \u201eAnyk\u0161[\u010d]i\u0173 \u0161ilelis\u201c, kur sunaikintas mi[\u0161]kas alegori[\u0161]kai primena tautos likim[\u0105]. Skirting[\u0173] laikotarpi[\u0173] autoriai kelia tas pa[\u010d]ias \u017emogi[\u0161]kas problemas. Abu k\u016briniai \u012frodo, jog t\u0117vyn\u0117s meil\u0117 suteikia \u017emogui dvasin[\u0119] atram[\u0105]. K\u016brinys atskleid\u017eia, jog tikrosios vertyb\u0117s i\u0161lieka svarbios visais laikais."},
+  {title:"\u017dmogaus ir gamtos ry\u0161ys", tag:"Donelaitis \u00b7 Baranauskas",
+   text:"\u017dmogaus vidinis pasaulis yra glau[d\u017e]iai susij[\u0119]s su gamta. Kristijono Donelai[\u010d]io poemoje \u201eMetai\u201c b\u016br[\u0173] gyvenimas pakl[\u016b]sta met\u0173 laik\u0173 ritmui, o darb[\u0161]tumas tampa svarbiausia dorybe. Abu autoriai pabr[\u0117][\u017e]ia \u017emogaus ir gamtos darn[\u0105]. Antano Baranausko \u201eAnyk\u0161[\u010d]i\u0173 \u0161ilelyje\u201c gamta virsta dvasine paguoda ir tautos atmintimi. Galima pasteb\u0117ti, kad gamtos vaizdai padeda atskleisti veik\u0117j[\u0173] jausmus. \u017dmogaus prigimtis nesikei[\u010d]ia kei[\u010d]iantis epochoms, tod\u0117l \u0161i tema aktuali ir \u0161iandienos skaitytojui."},
+  {title:"Susvetim\u0117jimas svetimame pasaulyje", tag:"\u0160k\u0117ma",
+   text:"Ra\u0161ytojai da\u017enai nagrin\u0117ja ribines situacijas, kurios i[\u0161]ry\u0161kina \u017emogaus charakter[\u012f]. Antano \u0160k\u0117mos romane \u201eBalta drobul\u0117\u201c poetas Antanas Gar\u0161va, dirbdamas keltuvininku Niujorko vie[\u0161]butyje, i[\u0161]gyvena gil[\u0173] susvetim\u0117jim[\u0105]. Autorius subtiliai atskleid\u017eia \u017emogaus dvasin[\u012f] trapum[\u0105]: svetima aplinka ir prarasta t\u0117vyn\u0117 pama\u017eu palau[\u017e]ia jautri[\u0105] asmenyb[\u0119]. K\u016brinyje ry[\u0161]kiai atsiskleid\u017eia vidin\u0117 \u017emogaus kova. \u0160is klausimas aktualus ne tik k\u016brinio veik\u0117jams, bet ir \u0161iandienos \u017emogui, da\u017enai jau[\u010d]ian[\u010d]iam vienatv[\u0119] svetimame pasaulyje."},
+  {title:"Valios stoka ir nei\u0161sipild\u017eiusi laim\u0117", tag:"Vai\u017egantas",
+   text:"\u017dmogaus vidinis pasaulis yra sud\u0117tingesnis nei jo i[\u0161]orinis gyvenimas. Juozo Tumo-Vai\u017eganto apysakoje \u201eD\u0117d\u0117s ir d\u0117dien\u0117s\u201c Mykoliukas \u2014 jautrus ir darb[\u0161]tus \u017emogus, ta[\u010d]iau stokojantis valios. Jis nuo\u0161ir[d\u017e]iai myli Severij[\u0105], bet nedr[\u012f]sta kovoti d\u0117l savo laim\u0117s, tod\u0117l lieka vieni[\u0161]as. Galima teigti, kad \u017emog[\u0173] labiausiai veikia ne aplinkybe\u0301s, o jo paties b\u016bdas. K\u016brinys leid\u017eia suprasti, kad nery[\u017e]tingumas gali tapti tragi[\u0161]ko likimo prie[\u017e]astimi. \u0160i tema skatina perm[\u0105]styti asmenin[\u012f] santyk[\u012f] su atsakomybe ir vertyb\u0117mis."},
+  {title:"Moralinis pasirinkimas ir s\u0105\u017ein\u0117", tag:"Savickis \u00b7 \u201eVagis\u201c",
+   text:"Literat\u016bra da\u017enai tampa veidro[d\u017e]iu, atspindin[\u010d]iu \u017emogaus moralinius pasirinkimus. Jurgio Savickio novel\u0117je \u201eVagis\u201c berniukas stebi, kaip suaugusieji [\u017e]iauriai mu[\u0161]a sugaut[\u0105] arkliavag[\u012f]. Vaiko akimis \u017eelgiant, nusikalt\u0117lis atrodo beveik \u0161ventas, o tariamai dori kaimie[\u010d]iai \u2014 \u017eiaur[\u016b]s. Galiausiai berniukas slapta palei[d\u017e]ia sumu[\u0161]t[\u0105] vag[\u012f]. Veik\u0117jo pasirinkimai atskleid[\u017e]ia jo moralines nuostatas. Autorius leid\u017eia suprasti, kad kiekvienas sprendimas turi pasekmi[\u0173], o tikrasis dorumas ne visada sutampa su daugumos nuomone."}
+];
+
+const ESSAY_GROUPS = [
+  {label:"1 u\u017eduotis", essays:[0,1,2]},
+  {label:"2 u\u017eduotis", essays:[3,4]},
+  {label:"3 u\u017eduotis", essays:[5,6]}
+];
+
+const CATEGORIES = ["\u012e\u017eanga","Argumentavimas","Palyginimas","Apibendrinimas"];
+
+const PHRASES = [
+  {p:"Literat\u016bra da\u017enai tampa veidrod\u017eiu, atspindin\u010diu \u017emogaus moralinius pasirinkimus.", c:"\u012e\u017eanga"},
+  {p:"Kiekviena epocha kelia \u017emogui tuos pa\u010dius vertybinius klausimus.", c:"\u012e\u017eanga"},
+  {p:"Tik susid\u016br\u0119s su sunkumais \u017emogus parodo savo tikr\u0105j\u012f veid\u0105.", c:"\u012e\u017eanga"},
+  {p:"\u017dmogaus vidinis pasaulis yra sud\u0117tingesnis nei jo i\u0161orinis gyvenimas.", c:"\u012e\u017eanga"},
+  {p:"Veik\u0117jo pasirinkimai atskleid\u017eia jo moralines nuostatas.", c:"Argumentavimas"},
+  {p:"Autorius pabr\u0117\u017eia, kad tikrosios vertyb\u0117s i\u0161ry\u0161k\u0117ja kriz\u0117s metu.", c:"Argumentavimas"},
+  {p:"Galima pasteb\u0117ti, kad veik\u0117j\u0105 labiausiai veikia ne aplinka, o jo s\u0105\u017ein\u0117.", c:"Argumentavimas"},
+  {p:"Autorius subtiliai atskleid\u017eia \u017emogaus dvasin\u012f trapum\u0105.", c:"Argumentavimas"},
+  {p:"Pana\u0161i problema nagrin\u0117jama ir kitame literat\u016bros k\u016brinyje.", c:"Palyginimas"},
+  {p:"Abu veik\u0117jai susiduria su moralinio pasirinkimo b\u016btinybe.", c:"Palyginimas"},
+  {p:"Skirting\u0173 laikotarpi\u0173 autoriai kelia tas pa\u010dias \u017emogi\u0161kas problemas.", c:"Palyginimas"},
+  {p:"Nors k\u016brini\u0173 aplinkybe\u0301s skirtingos, veik\u0117j\u0173 i\u0161gyvenimai pana\u0161\u016bs.", c:"Palyginimas"},
+  {p:"Taigi galima teigti, kad \u017emogaus vertyb\u0117s lemia jo gyvenimo pasirinkimus.", c:"Apibendrinimas"},
+  {p:"Apibendrinant galima sakyti, kad \u017emogaus stipryb\u0117 atsiskleid\u017eia sunkiomis akimirkomis.", c:"Apibendrinimas"},
+  {p:"K\u016brinys atskleid\u017eia, jog tikrosios vertyb\u0117s i\u0161lieka svarbios visais laikais.", c:"Apibendrinimas"},
+  {p:"Literat\u016bra primena, kad moraliniai sprendimai formuoja \u017emogaus asmenyb\u0119.", c:"Apibendrinimas"}
+];
+
+const CLASSIFY_GROUPS = [
+  {label:"1 u\u017eduotis", indices:[0,4,8,12]},
+  {label:"2 u\u017eduotis", indices:[1,5,9,13]},
+  {label:"3 u\u017eduotis", indices:[2,6,10,14]},
+  {label:"4 u\u017eduotis", indices:[3,7,11,15]}
+];
+
+const ASSEMBLE = [
+  {title:"Pareiga prie\u0161 asmeninius tro\u0161kimus", tag:"Putinas \u00b7 G\u0117t\u0117",
+   tokens:[
+    {slot:true, correct:0, options:["K\u016briniuose atsiskleid\u017eia am\u017eina kova tarp pareigos ir asmenini\u0173 tro\u0161kim\u0173.","Veik\u0117jo elgesys atskleid\u017eia vidin\u012f konflikt\u0105.","Apibendrinant galima sakyti, kad \u017emogaus stipryb\u0117 atsiskleid\u017eia sunkiomis akimirkomis."]},
+    {text:"Vinco Mykolai\u010dio-Putino romane \u201eAltori\u0173 \u0161e\u0161\u0117ly\u201c Liudas Vasaris ilgai svarsto, ar gali likti kunigu, jei jau\u010diasi es\u0105s poetas."},
+    {slot:true, correct:0, options:["Veik\u0117jo pasirinkimai atskleid\u017eia jo moralines nuostatas.","Kiekviena epocha kelia \u017emogui tuos pa\u010dius vertybinius klausimus.","Abu veik\u0117jai susiduria su moralinio pasirinkimo b\u016btinybe."]},
+    {text:"Galiausiai jis pasirenka k\u016brybin\u0119 laisv\u0119 ir atsisako kunigyst\u0117s."},
+    {slot:true, correct:0, options:["Pana\u0161i problema nagrin\u0117jama ir kitame literat\u016bros k\u016brinyje.","Literat\u016bra primena, kad moraliniai sprendimai formuoja \u017emogaus asmenyb\u0119.","Autorius pabr\u0117\u017eia moralinio pasirinkimo svarb\u0105."]},
+    {text:"G\u0117t\u0117s \u201eFauste\u201c herojus taip pat aukoja ramyb\u0119 d\u0117l nuolatinio b\u016bties pa\u017einimo siekio."},
+    {slot:true, correct:0, options:["Taigi galima teigti, kad \u017emogaus vertyb\u0117s lemia jo gyvenimo pasirinkimus.","Tik susid\u016br\u0119s su sunkumais \u017emogus parodo savo tikr\u0105j\u012f veid\u0105.","Nors k\u016brini\u0173 aplinkybe\u0301s skirtingos, veik\u0117j\u0173 i\u0161gyvenimai pana\u0161\u016bs."]}
+  ]},
+  {title:"\u017dmogaus esm\u0117 sunkum\u0173 akivaizdoje", tag:"Sruoga \u00b7 \u0160k\u0117ma",
+   tokens:[
+    {slot:true, correct:0, options:["Tik susid\u016br\u0119s su sunkumais \u017emogus parodo savo tikr\u0105j\u012f veid\u0105.","Veik\u0117jo pasirinkimai atskleid\u017eia jo moralines nuostatas.","K\u016brinys atskleid\u017eia, jog tikrosios vertyb\u0117s i\u0161lieka svarbios visais laikais."]},
+    {text:"Balio Sruogos \u201eDiev\u0173 mi\u0161ke\u201c kaliniai kasdien kovoja d\u0117l i\u0161likimo ir \u017emogi\u0161ko orumo."},
+    {slot:true, correct:0, options:["Autorius pabr\u0117\u017eia, kad tikrosios vertyb\u0117s i\u0161ry\u0161k\u0117ja kriz\u0117s metu.","Ra\u0161ytojai da\u017enai nagrin\u0117ja ribines situacijas.","Skirting\u0173 laikotarpi\u0173 autoriai kelia tas pa\u010dias \u017emogi\u0161kas problemas."]},
+    {text:"Net ir ne\u017emoni\u0161komis s\u0105lygomis ironija padeda i\u0161saugoti savigarbą."},
+    {slot:true, correct:0, options:["Skirting\u0173 laikotarpi\u0173 autoriai kelia tas pa\u010dias \u017emogi\u0161kas problemas.","Apibendrinant galima sakyti, kad \u017emogaus prigimtis nekinta.","Galima pasteb\u0117ti, kad veik\u0117j\u0105 veikia jo s\u0105\u017ein\u0117."]},
+    {text:"Antano \u0160k\u0117mos \u201eBaltoje drobul\u0117je\u201c \u017emog\u0173 taip pat bando palau\u017eti svetima, prasm\u0117s netekusi aplinka."},
+    {slot:true, correct:0, options:["Apibendrinant galima sakyti, kad \u017emogaus stipryb\u0117 atsiskleid\u017eia sunkiomis akimirkomis.","Kiekviena epocha kelia \u017emogui tuos pa\u010dius klausimus.","Abu veik\u0117jai susiduria su moralinio pasirinkimo b\u016btinybe."]}
+  ]}
+];
+
+// ═══════════════════════════════════════════════
+//  UTILITIES
+// ═══════════════════════════════════════════════
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function $(s,p){return(p||document).querySelector(s);}
+function $$(s,p){return[...(p||document).querySelectorAll(s)];}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ═══════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════
+$$('.tabs button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('.tabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    $$('.section').forEach(s=>s.classList.remove('active'));
+    $('#sec-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════════
+//  TAB 1 – LAIKOTARPIS IR RAŠYBA
+// ═══════════════════════════════════════════════
+let bioIdx=0;
+function renderBioPills(){
+  const box=$('#author-pills'); box.innerHTML='';
+  AUTHORS.forEach((a,i)=>{
+    const b=el('button','',a.short);
+    if(i===bioIdx) b.classList.add('active');
+    b.addEventListener('click',()=>{bioIdx=i;renderBioPills();renderBioCard();});
+    box.appendChild(b);
+  });
+}
+function renderBioCard(){
+  const a=AUTHORS[bioIdx], box=$('#bio-card-area');
+  const parts=a.bio.split(/___/), gapN=parts.length-1;
+  let html=`<div class="card"><h3>${a.name}</h3>`;
+  html+=`<div class="label">1. Pasirink teising\u0105 laikotarp\u012f:</div><div class="opts" id="period-opts">`;
+  a.periods.forEach(p=>{html+=`<button class="opt" data-val="${p}">${p}</button>`;});
+  html+=`</div><div id="period-check-area"></div>`;
+  html+=`<div class="label">2. U\u017epildyk praleistas raides:</div><div class="bio-text" id="bio-fill">`;
+  parts.forEach((part,i)=>{
+    html+=part;
+    if(i<gapN){const w=Math.max(26,a.answers[i].length*14);
+      html+=`<input class="gap" data-gidx="${i}" maxlength="${a.answers[i].length+2}" style="width:${w}px" placeholder="\u2026">`;}
+  });
+  html+=`</div><div id="spell-check-area"></div><div id="bio-retry-area"></div></div>`;
+  box.innerHTML=html;
+
+  let pLocked=false;
+  $$('#period-opts .opt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(pLocked) return; pLocked=true;
+      const ok=btn.dataset.val===a.correctPeriod;
+      $$('#period-opts .opt').forEach(b=>{
+        b.classList.add('locked');
+        if(b.dataset.val===a.correctPeriod) b.classList.add('correct');
+        else if(b===btn&&!ok) b.classList.add('wrong');
+      });
+      $('#period-check-area').appendChild(el('div','fb '+(ok?'ok':'err'),ok?'\u2713 Teisingai!':'\u2717 Teisingas atsakymas: '+a.correctPeriod));
+    });
+  });
+
+  let sLocked=false;
+  const sBtn=el('button','btn','Tikrinti ra\u0161yb\u0105');
+  sBtn.addEventListener('click',()=>{
+    if(sLocked) return; sLocked=true;
+    let score=0; const gaps=$$('#bio-fill .gap');
+    gaps.forEach(g=>{const idx=+g.dataset.gidx;
+      const ok=(g.value||'').trim().toLowerCase()===a.answers[idx].toLowerCase();
+      g.classList.add(ok?'ok':'err'); g.disabled=true; if(ok) score++;});
+    const cls=score===gapN?'ok':score>gapN/2?'mid':'err';
+    let h=`Ra\u0161yba: ${score}/${gapN} teisingai`;
+    if(score<gapN){h+=`<div class="corrections">`;
+      for(let i=0;i<gapN;i++){if((gaps[i].value||'').trim().toLowerCase()!==a.answers[i].toLowerCase())
+        h+=`<span>${i+1}: <strong>${a.answers[i]}</strong></span> `;}h+=`</div>`;}
+    const fb=el('div','fb '+cls); fb.innerHTML=h;
+    $('#spell-check-area').innerHTML=''; $('#spell-check-area').appendChild(fb); sBtn.remove();
+  });
+  $('#spell-check-area').appendChild(sBtn);
+  const rBtn=el('button','btn full','\u21BA Prad\u0117ti i\u0161 naujo');
+  rBtn.style.marginTop='12px';
+  rBtn.addEventListener('click',()=>renderBioCard());
+  $('#bio-retry-area').appendChild(rBtn);
+}
+renderBioPills(); renderBioCard();
+
+// ═══════════════════════════════════════════════
+//  TAB 2 – KŪRINIŲ ANALIZĖ
+// ═══════════════════════════════════════════════
+let aAns={};
+function buildAnalysis(){
+  aAns={}; const ar=$('#analysis-area'); ar.innerHTML='';
+  $('#analysis-fb').innerHTML=''; $('#analysis-retry').style.display='none';
+  ANALYSIS.forEach((q,i)=>{
+    const card=el('div','card');
+    let h=`<div style="font-weight:600;font-size:14.5px;margin-bottom:10px;color:var(--navy)">${i+1}. ${q.q}</div><div class="opts" data-qi="${i}">`;
+    q.opts.forEach((o,j)=>{h+=`<button class="opt" data-qi="${i}" data-oi="${j}">${o}</button>`;});
+    h+=`</div><div class="expl-area" data-qi="${i}"></div>`;
+    card.innerHTML=h; ar.appendChild(card);
+  });
+}
+buildAnalysis();
+$('#analysis-area').addEventListener('click',e=>{
+  const btn=e.target.closest('.opt[data-qi]');
+  if(!btn||btn.classList.contains('locked')) return;
+  const qi=+btn.dataset.qi; if(aAns.hasOwnProperty(qi)) return;
+  const q=ANALYSIS[qi], ch=+btn.dataset.oi; aAns[qi]=ch;
+  const ok=ch===q.c;
+  $$(`[data-qi="${qi}"].opt`,$('#analysis-area')).forEach(b=>{
+    b.classList.add('locked');
+    if(+b.dataset.oi===q.c) b.classList.add('correct');
+    else if(b===btn&&!ok) b.classList.add('wrong');
+  });
+  if(!ok) $(`.expl-area[data-qi="${qi}"]`).innerHTML=`<div class="explain">&#x1F4A1; ${q.ex}</div>`;
+  if(Object.keys(aAns).length===ANALYSIS.length){
+    const sc=Object.keys(aAns).filter(k=>aAns[k]===ANALYSIS[+k].c).length, n=ANALYSIS.length;
+    $('#analysis-fb').innerHTML=`<div class="fb big ${sc===n?'ok':sc>n/2?'mid':'err'}">Rezultatas: ${sc}/${n}</div>`;
+    $('#analysis-retry').style.display='block';
+  }
+});
+$('#analysis-retry').addEventListener('click',()=>buildAnalysis());
+
+// ═══════════════════════════════════════════════
+//  TAB 3 – VEIKĖJŲ ATPAŽINIMAS
+// ═══════════════════════════════════════════════
+let sChars, aWorks;
+function buildMatch(){
+  sChars=shuffle(CHARACTERS); aWorks=shuffle([...new Set(CHARACTERS.map(c=>c.w))]);
+  const mArea=$('#match-area'); mArea.innerHTML='';
+  $('#match-fb').innerHTML=''; $('#match-retry').style.display='none';
+  sChars.forEach((c,i)=>{
+    const row=el('div','match-row'), sel=document.createElement('select');
+    sel.className='match-sel'; sel.dataset.mi=i;
+    const emp=document.createElement('option'); emp.value=''; emp.textContent='\u2014 pasirink k\u016brin\u012f \u2014';
+    sel.appendChild(emp);
+    aWorks.forEach(w=>{const o=document.createElement('option');o.value=w;o.textContent=w;sel.appendChild(o);});
+    const ans=el('span','match-ans-area'); ans.dataset.mi=i;
+    row.appendChild(el('span','match-char',c.ch)); row.appendChild(sel); row.appendChild(ans);
+    mArea.appendChild(row);
+  });
+}
+buildMatch();
+$('#match-area').addEventListener('change',e=>{
+  const sel=e.target.closest('select[data-mi]'); if(!sel||sel.disabled) return;
+  const mi=+sel.dataset.mi, ok=sel.value===sChars[mi].w;
+  sel.classList.add(ok?'ok':'err'); sel.disabled=true;
+  if(!ok) $(`[data-mi="${mi}"].match-ans-area`).innerHTML=`<span class="match-ans">\u2192 ${sChars[mi].w}</span>`;
+  const all=$$('select[data-mi]',$('#match-area'));
+  if(all.every(s=>s.disabled)){
+    const sc=all.filter(s=>s.classList.contains('ok')).length, n=sChars.length;
+    $('#match-fb').innerHTML=`<div class="fb big ${sc===n?'ok':sc>n/2?'mid':'err'}">${sc}/${n} teisingai</div>`;
+    $('#match-retry').style.display='block';
+  }
+});
+$('#match-retry').addEventListener('click',()=>buildMatch());
+
+// ═══════════════════════════════════════════════
+//  TAB 4 – SĄSAJOS RAŠINIUI
+// ═══════════════════════════════════════════════
+let tAns={};
+function buildThemes(){
+  tAns={}; const tArea=$('#themes-area'); tArea.innerHTML='';
+  $('#themes-fb').innerHTML=''; $('#themes-retry').style.display='none';
+  THEMES.forEach((t,i)=>{
+    const card=el('div','card');
+    let h=`<div class="theme-q">\u201e${t.t}\u201c</div><div class="opts" data-ti="${i}">`;
+    t.opts.forEach((o,j)=>{h+=`<button class="opt" data-ti="${i}" data-val="${o}">${o}</button>`;});
+    h+=`</div>`; card.innerHTML=h; tArea.appendChild(card);
+  });
+}
+buildThemes();
+$('#themes-area').addEventListener('click',e=>{
+  const btn=e.target.closest('.opt[data-ti]'); if(!btn||btn.classList.contains('locked')) return;
+  const ti=+btn.dataset.ti; if(tAns.hasOwnProperty(ti)) return;
+  const t=THEMES[ti], ch=btn.dataset.val; tAns[ti]=ch;
+  const ok=ch===t.a;
+  $$(`[data-ti="${ti}"].opt`,$('#themes-area')).forEach(b=>{
+    b.classList.add('locked');
+    if(b.dataset.val===t.a) b.classList.add('correct');
+    else if(b===btn&&!ok) b.classList.add('wrong');
+  });
+  if(Object.keys(tAns).length===THEMES.length){
+    const sc=Object.keys(tAns).filter(k=>tAns[k]===THEMES[+k].a).length, n=THEMES.length;
+    $('#themes-fb').innerHTML=`<div class="fb big ${sc===n?'ok':sc>n/2?'mid':'err'}">${sc}/${n} teisingai</div>`;
+    $('#themes-retry').style.display='block';
+  }
+});
+$('#themes-retry').addEventListener('click',()=>buildThemes());
+
+// ═══════════════════════════════════════════════
+//  TAB 5 – RAŠINIO FRAGMENTAI
+// ═══════════════════════════════════════════════
+let essayGroup=0;
+function buildEssayPills(){
+  const box=$('#essay-pills'); box.innerHTML='';
+  ESSAY_GROUPS.forEach((g,i)=>{
+    const b=el('button','',g.label);
+    if(i===essayGroup) b.classList.add('active');
+    b.addEventListener('click',()=>{essayGroup=i;buildEssayPills();showEssayGroup();});
+    box.appendChild(b);
+  });
+}
+function showEssayGroup(){
+  const area=$('#essay-groups'); area.innerHTML='';
+  ESSAY_GROUPS[essayGroup].essays.forEach(ei=>{
+    const essay=ESSAYS[ei], card=el('div','card');
+    card.innerHTML=`<h3>${essay.title}</h3><span class="tag">${essay.tag}</span>`;
+    const body=el('div','essay');
+    const re=/\[([^\]]*)\]/g;
+    let last=0, m, gi=0, answers=[], html='';
+    while((m=re.exec(essay.text))!==null){
+      html+=esc(essay.text.slice(last,m.index));
+      const ans=m[1]; answers.push(ans);
+      const w=Math.max(26,ans.length*15);
+      html+=`<input class="gap" data-gi="${gi}" maxlength="${ans.length+2}" style="width:${w}px" placeholder="\u2026">`;
+      last=re.lastIndex; gi++;
+    }
+    html+=esc(essay.text.slice(last));
+    body.innerHTML=html; card.appendChild(body);
+    const theAns=[...answers], btn=el('button','btn','Tikrinti'), fbArea=el('div');
+    btn.addEventListener('click',(()=>{
+      const a=theAns, c=card, b=btn, f=fbArea;
+      return ()=>{
+        let score=0; const gaps=$$('.gap',c);
+        gaps.forEach(g=>{const idx=+g.dataset.gi;
+          const ok=(g.value||'').trim().toLowerCase()===a[idx].toLowerCase();
+          g.classList.add(ok?'ok':'err'); g.disabled=true; if(ok) score++;});
+        const n=a.length, cls=score===n?'ok':score>n/2?'mid':'err';
+        let h=`Ra\u0161yba: ${score}/${n} teisingai`;
+        if(score<n){h+=`<div class="corrections">`;
+          gaps.forEach(g=>{const i=+g.dataset.gi;
+            if((g.value||'').trim().toLowerCase()!==a[i].toLowerCase())
+              h+=`<span>${i+1}: <strong>${esc(a[i])}</strong></span> `;});h+=`</div>`;}
+        f.innerHTML=`<div class="fb ${cls}">${h}</div>`; b.remove();
+      };
+    })());
+    card.appendChild(btn); card.appendChild(fbArea); area.appendChild(card);
+  });
+}
+buildEssayPills(); showEssayGroup();
+
+// ═══════════════════════════════════════════════
+//  TAB 6 – FRAZIŲ VAIDMUO
+// ═══════════════════════════════════════════════
+let classifyGroup=0;
+function buildClassifyPills(){
+  const box=$('#classify-pills'); box.innerHTML='';
+  CLASSIFY_GROUPS.forEach((g,i)=>{
+    const b=el('button','',g.label);
+    if(i===classifyGroup) b.classList.add('active');
+    b.addEventListener('click',()=>{classifyGroup=i;buildClassifyPills();showClassifyGroup();});
+    box.appendChild(b);
+  });
+}
+function showClassifyGroup(){
+  const area=$('#classify-groups'); area.innerHTML='';
+  const items=shuffle(CLASSIFY_GROUPS[classifyGroup].indices.map(i=>PHRASES[i]));
+  const container=el('div');
+  items.forEach((item,i)=>{
+    const card=el('div','card'), row=el('div','prow');
+    let opts=`<option value="">\u2014 pasirink dal\u012f \u2014</option>`;
+    CATEGORIES.forEach(c=>{opts+=`<option value="${c}">${c}</option>`;});
+    row.innerHTML=`<div class="phrase">\u201e${esc(item.p)}\u201c</div><select class="psel" data-ci="${i}">${opts}</select><span class="pans-area" data-ci="${i}"></span>`;
+    card.appendChild(row); container.appendChild(card);
+  });
+  const btn=el('button','btn full','Tikrinti'), fbArea=el('div');
+  btn.addEventListener('click',(()=>{
+    const its=items, cont=container, b=btn, f=fbArea;
+    return ()=>{
+      let score=0;
+      its.forEach((item,i)=>{
+        const sel=$(`select[data-ci="${i}"]`,cont);
+        const ok=sel.value===item.c;
+        sel.classList.add(ok?'ok':'err'); sel.disabled=true; if(ok) score++;
+        if(!ok) $(`[data-ci="${i}"].pans-area`,cont).innerHTML=`<span class="pans">\u2192 ${item.c}</span>`;
+      });
+      const n=its.length, cls=score===n?'ok':score>n/2?'mid':'err';
+      f.innerHTML=`<div class="fb big ${cls}">${score}/${n} teisingai</div>`; b.remove();
+    };
+  })());
+  container.appendChild(btn); container.appendChild(fbArea); area.appendChild(container);
+}
+buildClassifyPills(); showClassifyGroup();
+
+// ═══════════════════════════════════════════════
+//  TAB 7 – SUDĖLIOK RAŠINĮ
+// ═══════════════════════════════════════════════
+const asArea=$('#assemble-area'), asState=[];
+ASSEMBLE.forEach((essay,ei)=>{
+  const card=el('div','card');
+  card.innerHTML=`<h3>${essay.title}</h3><span class="tag">${essay.tag}</span>`;
+  const body=el('div','atext'); let slotN=0;
+  essay.tokens.forEach(tok=>{
+    if(tok.text){
+      body.appendChild(el('span',null,` ${esc(tok.text)} `));
+    } else {
+      const cv=tok.options[tok.correct], sh=shuffle(tok.options), key=`${ei}-${slotN}`;
+      asState.push({key,correctVal:cv});
+      let opts=`<option value="">\u2014 pasirink fraz\u0119 \u2014</option>`;
+      sh.forEach(o=>{opts+=`<option value="${esc(o)}">${esc(o)}</option>`;});
+      const sel=el('select','aslot'); sel.dataset.key=key; sel.innerHTML=opts;
+      const sp=el('span','aans-area'); sp.dataset.key=key;
+      body.appendChild(sel); body.appendChild(sp); slotN++;
+    }
+  });
+  card.appendChild(body); asArea.appendChild(card);
+});
+$('#check-assemble').addEventListener('click',()=>{
+  let score=0;
+  asState.forEach(st=>{
+    const sel=$(`select[data-key="${st.key}"]`);
+    const ok=sel.value===st.correctVal;
+    sel.classList.add(ok?'ok':'err'); sel.disabled=true; if(ok) score++;
+    if(!ok) $(`[data-key="${st.key}"].aans-area`).innerHTML=`<span class="aans">\u2192 ${esc(st.correctVal)}</span>`;
+  });
+  const n=asState.length, cls=score===n?'ok':score>n/2?'mid':'err';
+  $('#assemble-fb').innerHTML=`<div class="fb big ${cls}">${score}/${n} teisingai</div>`;
+  $('#check-assemble').style.display='none';
+});
+</script>
+</body>
+</html>
